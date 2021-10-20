@@ -1,4 +1,3 @@
-from status import Status
 from issue import Issue
 from issue_list import IssueList
 from csv_writer import write_to_csv
