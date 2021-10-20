@@ -1,11 +1,17 @@
 from status import Status
 from issue import Issue
 from issue_list import IssueList
+import os
+
+
 
 def main():
 
+    BASE_DIR = os.path.dirname(__file__)
+
     def write_to_csv(issue):
-        with open("C:/Users/Fernweh/PycharmProjects/BugTrackerNew/issues.csv", "w") as csv_file:
+        path = os.path.join(BASE_DIR, "issues.csv")
+        with open(path, "w") as csv_file:
             csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             csv_writer.writerow(issue.to_csv())
 
