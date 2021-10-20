@@ -1,10 +1,10 @@
 from typing import List
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from issue import Issue
 
 @dataclass
 class IssueList:
-    issues: List[Issue]
+    issues: List[Issue] = field(default_factory = list)
 
     def add_new(self, **kwargs):
         self.issues.append(Issue(**kwargs))
