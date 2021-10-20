@@ -26,9 +26,7 @@ class Issue:
     # @property
     # def date_created(self):
     #     return self.date_created.strftime("%m/%d/%Y, %H:%M:%S")
-    #
-    def to_csv(self):
-        return f"{self._id},{self.title},{self.description},{self.status},{self.user},{self.date_created}."
+
 
 
 
