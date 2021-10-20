@@ -2,20 +2,13 @@ import csv
 from collections import defaultdict
 from dataclasses import dataclass, field
 from typing import List, Dict, Set, Optional
-from enum import Enum, auto
 from itertools import count
 from pprint import pprint
 from datetime import datetime as dt
+from status import Status
 
 ID_GENERATOR = count(start=1)
 
-
-class Status(Enum):
-    NEW = auto()
-    IN_PROGRESS = auto()
-    REOPENED = auto()
-    ON_HOLD = auto()
-    CLOSED = auto()
 
 
 @dataclass()
@@ -75,7 +68,7 @@ def delete_from_list(number):
 delete_from_list(1)
 
 print(issue_list)
-s
+
 def write_to_csv(issue):
     with open("C:/Users/Fernweh/PycharmProjects/BugTrackerNew/issues.csv", "w") as csv_file:
         csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
