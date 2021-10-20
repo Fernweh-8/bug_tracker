@@ -1,0 +1,176 @@
+
+--------------------------------------------------------------------------------
+
+https://github.com/Fernweh-8/bug_tracker/blob/8588cadb1266d09e5e57feac7b29ef5cf20926e2/issue.py#L13
+
+przeniesc klase `Status` do osobnego pliku o nazwie `status.py` i potrzebne dla niej importy
+w pliku glownym (np. `main.py` gdzie bedzie glowny kod naszego programu - tworzenie obiektow i wywolywanie metod) ja zaimportowac:
+`from status import Status`
+
+--------------------------------------------------------------------------------
+
+https://github.com/Fernweh-8/bug_tracker/blob/8588cadb1266d09e5e57feac7b29ef5cf20926e2/issue.py#L22
+
+w tym pliku (`issue.py`) zostawic tylko klase `Issue`
+usunac metode `to_csv` - nie bedzie nam potrzebna, poniewaz uzywamy modulu `csv` ktory sam sformatuje nam rekord do odpowiedniego formatu wiersza (musimy pamietac aby zamienic obiekt typu Issue na slownik)
+kazdy obiekt mozemy zamienic na slownik dostajac sie do magic property `__dict__` np.
+
+issue = Issue(title = 'bla bla', description = 'some text', ...)
+print(issue.__dict__)
+
+--------------------------------------------------------------------------------
+
+https://github.com/Fernweh-8/bug_tracker/blob/8588cadb1266d09e5e57feac7b29ef5cf20926e2/issue.py#L42
+
+tworzenie listy issues, wywolania metod `create_issue`, `add_to_list`, `delete_from_list` oraz zapis do csv przeniesc do pliku `main.py`, rozpoczac go w ten sposob
+
+# odpowiednie importy
+
+def main():
+    # tu umiescic nasz kod
+
+if __name__ == '__main__':
+    main()
+
+--------------------------------------------------------------------------------
+
+https://github.com/Fernweh-8/bug_tracker/blob/8588cadb1266d09e5e57feac7b29ef5cf20926e2/issue.py#L58
+
+# def create_issue(**kwargs):
+#     return Issue(**kwargs)
+#
+# def add_to_list():
+#     issue_list.append(create_issue)
+
+`add_to_list` posiada blad - appendujemy do listy referencje do obiektu funkji zamiast tego co ona zwraca - brak nawiasow i argumentow
+
+def create_issue(**kwargs):
+    return Issue(**kwargs)
+
+def add_issue(**kwargs):
+    issues.append(create_issue(**kwargs))
+
+niestety uzywamy powyzej zmiennych globalnych - powinnismy takze liste issues przekazac jako parametr - ale wtedy ta metoda jest mocno nadmiarowa - robimy tylko append wiec niepotrzebna nam jest nasza funkcja
+
+zamiast tego, najlepiej jakbysmy utworzyli klase IssueList, ktora zenkapsuuje nam liste issues w sobie i bedzie miala te metody, np.
+
+from typing import List
+from dataclasses import dataclass
+from issue import Issue
+
+@dataclass
+class IssueList:
+    issues: List[Issue]
+
+    def add_new(self, **kwargs):
+        self.issues(Issue(**kwargs))
+
+    def delete_by_id(self, _id):
+        for index, issue in enumerate(self.issues):
+            if issue._id == _id:
+                del self.issues[index]
+
+    def show(self):
+        for issue in self.issues:
+            print(issue)
+
+il = IssueList()
+il.add_new(title = 'A', description = 'B', user = 'C')
+il.add_new(title = 'D', description = 'E', user = 'F')
+il.delete_by_id(1)
+il.show()
+
+--------------------------------------------------------------------------------
+
+https://github.com/Fernweh-8/bug_tracker/blob/8588cadb1266d09e5e57feac7b29ef5cf20926e2/issue.py#L70
+
+zamiast 'remove' uzyjmy usuwania elementu po indeksie (oraz enumerate), pamietajmy o unikaniu zmiennych globalnych - liste issue takze przekazujmy jako parametr
+
+def delete_issue(issues, _id):
+    pass
+
+do 'remove' przekazujemy element ktory chcemy usunac z listy - obiekt
+jednak 'remove' wewnetrznie takze musi wykonac petle aby odszukac ten obiekt i go usunac
+jednak aby moc usunac obiekt z listy za pomoca 'remove' musimy miec jego egzemplarz zapisany w zmiennej
+(referencje), w przeciwnym razie musimy odszukac go 'recznie'
+
+sa dwa warianty albo uzywamy po prostu `lista.remove(obiekt)` bez petli
+lub szukamy obiektu 'recznie'
+
+for index, issue in enumerate(issues):
+    if issue._id == _id:
+        del issues[index]
+
+--------------------------------------------------------------------------------
+
+
+https://github.com/Fernweh-8/bug_tracker/blob/8588cadb1266d09e5e57feac7b29ef5cf20926e2/issue.py#L78
+
+wkradl sie babol - mamy niepotrzebna literke 's' - skrypt sie nie wykona
+
+--------------------------------------------------------------------------------
+
+
+https://github.com/Fernweh-8/bug_tracker/blob/8588cadb1266d09e5e57feac7b29ef5cf20926e2/issue.py#L79
+
+musimy zrefaktoryzowac (zmodyfikowac i poprawic) metode `write_to_csv`
+
+po pierwsze przekazmy od razu cala liste `issues` - poniewaz bez sensu zapisac plik .csv z jednym wierszem - marnotrawstwo zasobow i proszenie sie o bledy - kiedy sprobojemy dopisac cos do tego pliku
+
+po drugie sciezki - zazwyczaj powinnismy unikac absolutnych 'shardkodowanych' sciezek w stylu
+"C:/Users/Fernweh/PycharmProjects/BugTrackerNew/issues.csv"
+
+lepszym rozwiazaniem jest:
+
+w metazmiennej dostepnej w kazdym skrypcie Pythona `__file__` jest pelna sciezka wraz z nazwa aktualnego skryptu
+
+uzywajac modulu `os` mozemy dostac folder, w ktorym ten plik sie znajduje, i zapisac ta sciezke jako nasza sciezka bazowa (od ktorej bedziemy wychodzic i tworzyc sciezki w projekcie do innych plikow)
+do tego celu uzywamy dwoch metod:
+`os.path.join` - przekazujemy dowolna liczbe argumentow, i ta metoda tworzy nam poprawna sciezke (o ile uzylismy dozwolonych znakow) - jest to bezpieczna metoda, ktora bierze pod uwage system operacyjny, na ktorym uruchamiamy i uzywa odpowiedniego separatora automatycznie np / dla windowsa
+oraz `os.path.dirname` - zwraca nam sciezke bez nazwy pliku
+
+dopelnienie `os.path.dirname` to `os.path.basename` - zwraca nam sama nazwe pliku ze sciezki
+
+przyklad:
+
+import os
+
+# nasza stala wskazujaca na aktualny folder - mozemy przenosic dowolnie skrypt, za kazdym razem Python dynamicznie podmieni ja na odpowiednie miejsce na dysku
+
+BASE_DIR = os.path.dirname(__file__)
+
+--------------------------------------------------------------------------------
+
+https://github.com/Fernweh-8/bug_tracker/blob/8588cadb1266d09e5e57feac7b29ef5cf20926e2/issue.py#L81
+
+zamiast `csv.writer` uzyjmy `csv.DictWriter` - ta klasa automatycznie obsluguje slowniki i jest latwiejsza w uzyciu niz ogolny writer. Pamietajmy ze lista kolumn naglowka i slownik z danymi wiersza musza sie zgadzac (ilosciowo i nazwy)
+
+np.
+
+# mode = 'w+' - tworzy nam plik jesli nie istnieje
+# zamiast shardkodowanej sciezki - skladamy aktualna sciezke plus nazwa pliku uzywajac `os.path.join`
+# pamietajmy o parametrze `fieldnames` dla DictWriter - pokazujemy ile i w jakiej kolejnosci mamy wpisac kolumny
+
+def write_to_csv(issues, header_columns = ['title', 'description', 'user'])
+    with open(os.path.join(BASE_DIR, 'issues.csv'), mode = 'w+') as f:
+        writer = csv.DictWriter(f, delimiter = ',', quotechar = '"', quoting = csv.QUOTE_MINIMAL,
+            fieldnames = header_columns)
+        writer.writeheader()
+        for issue in issues:
+            # slownik powstaly z obiektu powinien miec dokladnie 3 pola - title, description i user
+            writer.write(issue.__dict__)
+
+ta metode mozemy umiescic w osobnym pliku np `helpers.py` skad ja zaimportujemy w razie potrzeby, to samo z innymi metodami standalone np. `create_issue` itp
+
+--------------------------------------------------------------------------------
+
+### Struktura projektu ###
+
+/
+  issue.py
+  status.py
+  helpers.py
+  main.py
+  *issues.csv (o ile istnieje juz)
+
+* napisz klase IssueList ktora zenkapsuuje liste `issues` w sobie - w niej beda metody
