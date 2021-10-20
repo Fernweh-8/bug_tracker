@@ -7,7 +7,7 @@ class IssueList:
     issues: List[Issue]
 
     def add_new(self, **kwargs):
-        self.issues(Issue(**kwargs))
+        self.issues.append(Issue(**kwargs))
 
     def delete_by_id(self, _id):
         for index, issue in enumerate(self.issues):
