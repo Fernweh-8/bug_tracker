@@ -17,3 +17,12 @@ class IssueList:
     def show(self):
         for issue in self.issues:
             print(issue)
+
+
+    def filter_by(self, name, value):
+        for index, issue in enumerate(self.issues):
+            param = getattr(issue, name)
+            if param == value:
+                return issue
+
+

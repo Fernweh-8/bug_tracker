@@ -17,6 +17,7 @@ class Issue:
     status: Status = field(default=Status.NEW, repr=False)
     _id: int = field(default_factory=lambda: next(ID_GENERATOR))
     date_created: dt = field(default=dt.now(), repr=True)
+    flagged: bool = field(default = False)
 
     # def __repr__(self):
     #     return f'(user: {self.user}, title: {self.title}, description: {self.description})'
