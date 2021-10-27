@@ -12,9 +12,9 @@ def main():
 
     # to_delete = int(input("Enter the id number of the issue you want to delete - only integers allowed."))
     # my_issues.delete_by_id(to_delete)
-
-    my_issues.show()
-    my_issues.filter_by(user_name, "Anna")
+    #
+    # my_issues.show()
+    print(my_issues.filter_by("user", "Anna"))
 
     #
     # write_to_csv()
