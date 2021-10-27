@@ -21,7 +21,7 @@ class IssueList:
 
     def filter_by(self, name, value):
         matched = []
-        for index, issue in enumerate(self.issues):
+        for issue in self.issues:
             param = getattr(issue, name)
             if param == value:
                 matched.append(issue)
