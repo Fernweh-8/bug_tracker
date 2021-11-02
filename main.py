@@ -11,14 +11,8 @@ def main():
         my_issues.add_new(user = user_name, title = bug_title, description = bug_description, flagged = True)
 
 
-    # to_delete = int(input("Enter the id number of the issue you want to delete - only integers allowed."))
-    # my_issues.delete_by_id(to_delete)
-    #
-    # my_issues.show()
-    print(my_issues.filter_by("user", "Anna"))
-
-    #
-    # write_to_csv()
+    # print(my_issues.filter_by("user", "Anna"))
+    print(my_issues.choose_attr())
 
 
 if __name__ == '__main__':

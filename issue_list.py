@@ -27,6 +27,13 @@ class IssueList:
                 matched.append(issue)
         return matched
 
+    def choose_attr(self):
+        for index, attr in enumerate(vars(Issue), start = 1):
+            # if not attr.startswith('_'):
+            print(f"{index}: {attr}")
+
+
+
 
 
 
