@@ -3,6 +3,8 @@ from typing import List
 from dataclasses import dataclass, field
 from issue import Issue
 from distutils import util
+from status import Status
+
 
 @dataclass
 class IssueList:
@@ -45,12 +47,13 @@ class IssueList:
                 print("You entered the wrong number. Try again.")
                 continue
 
+
     def choose_value(self):
         attr = self.choose_attr()
         while True:
             attr_value = input(f'Enter the value of the {attr} attribute: ')
             if attr == "status":
-                pass
+                attr_value = Status.parse_status(attr_value)
             if attr == "flagged":
                 try:
                     attr_value = bool(distutils.util.strtobool(attr_value))
