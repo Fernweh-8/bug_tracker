@@ -54,7 +54,7 @@ class IssueList:
         while True:
             attr_value = input(f'Enter the value of the {attr} attribute: ')
             if attr == "status":
-                attr_value = Status.parse_status(attr_value)
+                attr_value = Status.parse_status()
             if attr == "flagged":
                 try:
                     attr_value = bool(distutils.util.strtobool(attr_value))
