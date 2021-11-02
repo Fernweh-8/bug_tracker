@@ -12,7 +12,10 @@ def main():
 
 
     # print(my_issues.filter_by("user", "Anna"))
-    print(my_issues.choose_attr())
+
+    # print(my_issues.choose_attr())
+    print(my_issues.choose_value())
+
 
 
 if __name__ == '__main__':
