@@ -1,0 +1,150 @@
+
+=> dodaj legende w main, tylko z dostepnych property w Issue mozna wybrac (numerki)
+
+def get_attr_choice():
+    # pobieramy liste dostepnych pól w klasie Issue
+    attrs = [p for p in vars(Issue) if not p.startswith('_')]
+    print('Filter issues by:')
+    # wypisujemy kolejno dostepne pola z Issue, po ktorych mozemy filtrowac (zaczynamy liczyc od 1)
+    for no, attr in enumerate(attrs, start = 1):
+        print(f"{no}) {attr}")
+    # dopoki uzytkownik nie poda prawidlowej nazwy pola
+    while True:
+        try:
+            # try-except jest nam potrzebny na wypadek jesli to co ktos wpisal nie jest liczba
+            # dostaniemy wtedy wyjatek
+            choice = int(input('Choose number: '))
+            # jesli podany number atrybutu z legendy wyzej jest prawidlowy, wybieramy ten atrybut
+            # z listy (pamietajac ze indeksy sa od 0 a nie od 1, stad odejmujemy 1)
+            if 1 <= choice < len(attrs) + 1:
+                return attrs[choice - 1]
+            else:
+                # niepoprawny numer, forsujemy wyrzucenie wyjatku ValueError, ktory zlapiemy nizej
+                raise ValueError()
+        except (TypeError, ValueError):
+            # gdy uzytkownik wybral nieprawidlowa opcje, kazemy mu wpisac jeszcze raz
+            print('Try again, you have not provided a valid number')
+            continue
+
+while True:
+    attr = get_attr_choice()
+    val = input('Attribute value: ')
+    # musimy skonwertowac wartosci tekstowe na odpowiednie typy, by moc po nich filtrowac
+    if attr == 'flagged':
+        # potrzebny nam parser zamieniajacy jakis string od uzytkownika na bool
+        val = parse_bool(val)
+    elif attr == 'status':
+        # musimy skonwertowac string na obiekt typu Status (potrzebujemy parsera - patrz nizej)
+        val = parse_status(val)
+    # wartosci pozostalych atrybutow sa typu string - nie musimy nic robic z nimi
+    pprint(issue_list.filter_by(attr, value))
+
+=> napisz parser dla wartosci z Status enum: Status.COMPLETED, COMPLETED, completed, 0..N
+
+testujemy wszystkie poprawne wartosci enuma
+jesli wszystkie statusy zaczynaja sie od unikalnej literki - mozemy uzyc jej jako wyboru np
+(c)ompleted, (a)borted, (i)n_progress, (r)eady
+
+def parse_status(string):
+    statuses = [(s.value, s.name.lower(), s) for s in list(Status)]
+    string = string.string().lower()
+    for v, n, s in statuses:
+        if string == v or string == n:
+            return s
+        if n.startswith(string) or string.endswith(n):
+            return s
+    raise ValueError('Wrong status')
+
+=> napisz parser dla wartosci bool => T/F, Y/N, (Y|y)es, (N|n)o, true/false, True, False, TRUE, FALSE, 1, 0
+
+def parse_bool(string):
+    allowed = {
+        False: ['f', 'false', 'n', 'no', '0'],
+        True: ['t', 'true', 'y', 'yes', '1']
+    }
+    val = string.strip().lower()
+    for res, possible in allowed.items():
+        if val in possible:
+            return res
+
+=> trzeba uporzadkowac kod w mainie - przydalyby sie testy jednostkowe, bedziemy
+w nich sprawdzac wartosci zwracane przez metody dla roznych argumentow, albo sprawdzac
+'output' z metod, przykladowo:
+
+# tests/test_helper_methods.py
+import unittest
+from unittest.mock import patch
+
+from issue_list import IssueList
+from issue import Issue
+from status import Status
+
+class TestHelperMethods(unittest.TestCase):
+    def setUp(self):
+        issues = [
+            { 'user': 'Anna', 'title': 'App does not work'),
+            { 'user': 'John', 'title': 'App crashes'),
+            { 'user': 'Anna', 'title': 'User account does not exist', 'status': Status.ON_HOLD),
+            { 'user': 'Anna', 'title': 'App still does not work', 'status': Status.REOPENED),
+            { 'user': 'John', 'title': 'Strange behavior', 'flagged': True)
+        ]
+        self.issue_list = IssueList()
+        for issue in issues:
+            self.issue_list.add_new(**issue)
+
+    def test_filter_by_name(self):
+        self.assertEqual(len(self.issue_list.filter_by('name', 'Anna')), 3)
+        self.assertEqual(len(self.issue_list.filter_by('name', 'John')), 2)
+        self.assertEqual(len(self.issue_list.filter_by('name', 'Bob')), 0)
+
+    def test_remove_issue_at_index(self):
+        ids = [3, 4, 1]
+        size = len(self.issue_list)
+        for _id in ids:
+            self.issue_list.delete_by_id(_id)
+            new_size = size - ids.index(_id) + 1
+            self.assertEqual(len(self.issue_list), new_size)
+
+    @patch('builtins.print')
+    def test_show_issues(self, mock_print):
+        # tu jakis kod
+        pass
+
+if __name__ == '__main__':
+    unittest.main()
+
+
+=> factory pattern dla issues
+
+napisac klase IssueFactory ktora bedzie miala metody statyczne (dekoratory @staticmethod / @classmethod) do ktorych potrzeba mniej argumentow i beda juz ustawione z odpowiednimi wartosciami
+
+from status import Status
+from issue import Issue
+
+class IssueFactory:
+    @staticmethod
+    def important_old_issue(**kwargs):
+        return Issue(**kwargs, flagged = True, status = Status.CLOSED)
+
+IssueFactory.important_old_issue(title = 'Something was wrong', user = 'Anna')
+# returns Issue(..., flagged = True, status = Status.CLOSED)
+
+=> wzorzec fasada - ukrywamy zlozone implementacje w prostym interfejsie
+
+def simplify_me():
+    ret = do_this()
+    if ret:
+        do_that()
+    do_this_too_unconditionally(arg1, arg2)
+
+# we don't use those 'hidden' methods directly, we only use 'simplify_me()'
+
+=> stworzyc klase User i zmienic Issue dataclass oraz pozostaly kod aby obsluzyc ta zmiane
+
+@dataclass(frozen = True)
+class User:
+    _id = ...
+    name = ...
+    email = ...
+    password = ...
+
