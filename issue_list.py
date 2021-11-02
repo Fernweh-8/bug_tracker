@@ -23,10 +23,11 @@ class IssueList:
             print(issue)
 
 
-    def filter_by(self, name, value):
+    def filter_by(self):
         matched = []
+        value = self.choose_value()
         for issue in self.issues:
-            param = getattr(issue, name)
+            param = getattr(issue, self.choose_attr())
             if param == value:
                 matched.append(issue)
         return matched
