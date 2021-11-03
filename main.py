@@ -11,10 +11,10 @@ def main():
         my_issues.add_new(user = user_name, title = bug_title, description = bug_description, flagged = True)
 
 
-    # print(my_issues.filter_by("user", "Anna"))
+    print(my_issues.filter_by("user", "Anna"))
 
     # print(my_issues.choose_attr())
-    print(my_issues.filter_by())
+    # print(my_issues.filter_by())
 
 
 

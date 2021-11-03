@@ -23,14 +23,18 @@ class IssueList:
             print(issue)
 
 
-    def filter_by(self):
+    def filter_by(self, _property, _value):
         matched = []
-        value = self.choose_value()
         for issue in self.issues:
-            param = getattr(issue, self.choose_attr())
-            if param == value:
-                matched.append(issue)
+            try:
+                if getattr(issue, _property) == _value:
+                    matched.append(issue)
+            except AttributeError:
+                break
         return matched
+
+    def cli_filter_by(self):
+        return self.filter_by(*self.choose_attr_value())
 
     def choose_attr(self):
         print("List of available attributes:")
@@ -49,18 +53,18 @@ class IssueList:
                 continue
 
 
-    def choose_value(self):
+    def choose_attr_value(self):
         attr = self.choose_attr()
         while True:
             attr_value = input(f'Enter the value of the {attr} attribute: ')
             if attr == "status":
-                attr_value = Status.parse_status()
-            if attr == "flagged":
+                attr_value = Status.parse_status(attr_value)
+            elif attr == "flagged":
                 try:
                     attr_value = bool(distutils.util.strtobool(attr_value))
                 except ValueError:
                     print("No such value. Try again. Enter yes for a flagged issue or no for an unflagged one: ")
-            return attr_value
+            return attr, attr_value
 
 
 

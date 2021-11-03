@@ -4,9 +4,9 @@ from enum import Enum, auto
 
 class Status(Enum):
 
-    @staticmethod
-    def parse_status(string):
-        statuses = [(s.value, s.name.lower(), s) for s in list(Status)]
+    @classmethod
+    def parse_status(cls, string):
+        statuses = [(s.value, s.name.lower(), s) for s in list(cls)]
         string = string.string().lower()
         for v, n, s in statuses:
             if string == v or string == n:
