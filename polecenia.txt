@@ -82,27 +82,27 @@ from status import Status
 class TestHelperMethods(unittest.TestCase):
     def setUp(self):
         issues = [
-            { 'user': 'Anna', 'title': 'App does not work'),
-            { 'user': 'John', 'title': 'App crashes'),
-            { 'user': 'Anna', 'title': 'User account does not exist', 'status': Status.ON_HOLD),
-            { 'user': 'Anna', 'title': 'App still does not work', 'status': Status.REOPENED),
-            { 'user': 'John', 'title': 'Strange behavior', 'flagged': True)
+            { 'user': 'Anna', 'title': 'App does not work'},
+            { 'user': 'John', 'title': 'App crashes'},
+            { 'user': 'Anna', 'title': 'User account does not exist', 'status': Status.ON_HOLD},
+            { 'user': 'Anna', 'title': 'App still does not work', 'status': Status.REOPENED},
+            { 'user': 'John', 'title': 'Strange behavior', 'flagged': True}
         ]
         self.issue_list = IssueList()
         for issue in issues:
             self.issue_list.add_new(**issue)
 
     def test_filter_by_name(self):
-        self.assertEqual(len(self.issue_list.filter_by('name', 'Anna')), 3)
-        self.assertEqual(len(self.issue_list.filter_by('name', 'John')), 2)
-        self.assertEqual(len(self.issue_list.filter_by('name', 'Bob')), 0)
+        self.assertEqual(len(self.issue_list.filter_by('user', 'Anna')), 3)
+        self.assertEqual(len(self.issue_list.filter_by('user', 'John')), 2)
+        self.assertEqual(len(self.issue_list.filter_by('user', 'Bob')), 0)
 
     def test_remove_issue_at_index(self):
         ids = [3, 4, 1]
         size = len(self.issue_list)
-        for _id in ids:
+        for idx, _id in enumerate(ids):
             self.issue_list.delete_by_id(_id)
-            new_size = size - ids.index(_id) + 1
+            new_size = size - idx + 1
             self.assertEqual(len(self.issue_list), new_size)
 
     @patch('builtins.print')

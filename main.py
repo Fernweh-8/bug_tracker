@@ -13,10 +13,6 @@ def main():
 
     print(my_issues.filter_by("user", "Anna"))
 
-    # print(my_issues.choose_attr())
-    # print(my_issues.filter_by())
-
-
 
 if __name__ == '__main__':
     main()
