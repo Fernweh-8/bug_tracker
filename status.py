@@ -6,13 +6,13 @@ class Status(Enum):
 
     @classmethod
     def parse_status(cls, string):
-        statuses = [(s.value, s.name.lower(), s) for s in list(cls)]
-        string = string.string().lower()
-        for v, n, s in statuses:
-            if string == v or string == n:
-                return s
-            if n.startswith(string) or string.endswith(n):
-                return s
+        statuses = [(status.value, status.name.lower(), status) for status in list(cls)]
+        string = str(string).lower()
+        for value, name, status in statuses:
+            if string == value or string == name:
+                return status
+            if name.startswith(string) or string.endswith(name):
+                return status
         raise ValueError('Wrong status')
 
     NEW = auto()
@@ -20,4 +20,3 @@ class Status(Enum):
     REOPENED = auto()
     ON_HOLD = auto()
     CLOSED = auto()
-
