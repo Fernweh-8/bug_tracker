@@ -26,10 +26,10 @@ class TestIssueList(unittest.TestCase):
     def test_delete_by_id(self):
         ids = [3, 4, 1]
         size = len(self.issue_list.issues)
-        for _id in ids:
+        for idx, _id in enumerate(ids):
             self.issue_list.delete_by_id(_id)
-            new_size = size - 1
-            self.assertEqual(len(self.issue_list.issues, new_size)
+            new_size = size - idx - 1
+            self.assertEqual(len(self.issue_list.issues), new_size)
 
 #     @patch('builtins.print')
 #     def test_show(self, mock_print):
