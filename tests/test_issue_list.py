@@ -31,8 +31,11 @@ class TestIssueList(unittest.TestCase):
             new_size = size - idx - 1
             self.assertEqual(len(self.issue_list.issues), new_size)
 
-#     @patch('builtins.print')
-#     def test_show(self, mock_print):
+    @patch('builtins.print')
+    def test_show(self, mock_print):
+        self.issue_list.show()
+        mock_print.call_args_list = self.issue_list.issues
+
 #         # TODO: update this string with proper output
 # #         expected_output = '''
 # # Issue(...)
@@ -43,7 +46,7 @@ class TestIssueList(unittest.TestCase):
         # expected_output = expected_output.strip()
 
         # we need to call our show method from issue_list (saved in setUp method)
-        # self.issue_list.show()
+
 
         # example:
         # print('hello')
@@ -63,8 +66,10 @@ class TestIssueList(unittest.TestCase):
     #     # list of other assertion methods: https://docs.python.org/3/library/unittest.html#unittest.TestCase.assertEqual
     #     self.assertEqual(True, True)
 
+
 if __name__ == '__main__':
     unittest.main()
+
 
     # to run tests from command line use this (from within this folder):
     # $ python3 -m unittest -v

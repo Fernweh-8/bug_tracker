@@ -11,7 +11,8 @@ def main():
         my_issues.add_new(user = user_name, title = bug_title, description = bug_description, flagged = True)
 
 
-    print(my_issues.filter_by("user", "Anna"))
+    # print(my_issues.filter_by("user", "Anna"))
+    print(my_issues.show())
 
 
 if __name__ == '__main__':
