@@ -31,6 +31,11 @@ class TestIssueList(unittest.TestCase):
             new_size = size - idx - 1
             self.assertEqual(len(self.issue_list.issues), new_size)
 
+        # ids = [3, 4, 1]
+        # for _id in  ids:
+        #     self.issue_list.delete_by_id(_id)
+        #     self.assertNotIn(self.issue_list.issues[])
+
     @patch('builtins.print')
     def test_show(self, mock_print):
         self.issue_list.show()
