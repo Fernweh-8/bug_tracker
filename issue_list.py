@@ -15,8 +15,15 @@ class IssueList:
 
     def delete_by_id(self, _id):
         for index, issue in enumerate(self.issues):
-            if issue._id == _id:
-                del self.issues[index]
+            try:
+                if issue._id == _id:
+                    del self.issues[index]
+            except TypeError:
+                print("Id must be of numeric value. Enter an integer.")
+            except ValueError:
+                print("No such id, try again")
+
+
 
     def show(self):
         for issue in self.issues:

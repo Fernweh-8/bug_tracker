@@ -25,6 +25,10 @@ class TestIssueList(unittest.TestCase):
         del self.issue_list
 
     def test_delete_by_id(self):
+        self.issue_list.delete_by_id("One")
+        self.assertRaises(TypeError)
+        self.issue_list.delete_by_id(0)
+        self.assertRaises(ValueError)
         ids = [3, 4, 1]
         size = len(self.issue_list.issues)
         for idx, _id in enumerate(ids):
