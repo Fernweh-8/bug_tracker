@@ -36,40 +36,12 @@ class TestIssueList(unittest.TestCase):
             new_size = size - idx - 1
             self.assertEqual(len(self.issue_list.issues), new_size)
 
-        # ids = [3, 4, 1]
-        # for _id in  ids:
-        #     self.issue_list.delete_by_id(_id)
-        #     self.assertNotIn(self.issue_list.issues[])
 
     @patch('builtins.print')
     def test_show(self, mock_print):
         self.issue_list.show()
         mock_print.call_args_list = self.issue_list.issues
 
-    #         # TODO: update this string with proper output
-    # #         expected_output = '''
-    # # Issue(...)
-    # Issue(...)
-    #         '''
-    # we must strip whitespace characters from beginning / end
-    # probably we need to cut only from beginning using lstrip instead
-    # expected_output = expected_output.strip()
-
-    # we need to call our show method from issue_list (saved in setUp method)
-
-    # example:
-    # print('hello')
-    # mock_print.assert_called_with('hello')
-    # print('world')
-    # mock_print.assert_called_with('world')
-    # print('aaa')
-    # mock_print.assert_called_with('aaa')
-
-    # if you want to check what's inside mock_print use this:
-    # sys.stdout.write(str(mock_print.call_args_list) + '\n')
-    # we must pass every parameter that is passed to our normal print function
-    # separately to the assert_called_with method
-    # example: https://realpython.com/lessons/mocking-print-unit-tests/
 
     def test_filter_by(self):
         self.issue_list.filter_by("owner", "App not loading")
@@ -77,10 +49,6 @@ class TestIssueList(unittest.TestCase):
         self.assertEqual(len(self.issue_list.filter_by('user', 'Anna')), 3)
         self.assertEqual(len(self.issue_list.filter_by('user', 'John')), 2)
         self.assertEqual(len(self.issue_list.filter_by('user', 'Bob')), 0)
-
-
-
-
 
 
 if __name__ == '__main__':
