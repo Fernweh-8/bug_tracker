@@ -68,8 +68,11 @@ class TestIssueList(unittest.TestCase):
     # example: https://realpython.com/lessons/mocking-print-unit-tests/
 
     def test_filter_by(self):
-        self.issue_list.filter_by("Bob", "App not loading")
+        self.issue_list.filter_by("owner", "App not loading")
         self.assertRaises(AttributeError)
+        self.assertEqual(len(self.issue_list.filter_by('user', 'Anna')), 3)
+        self.assertEqual(len(self.issue_list.filter_by('user', 'John')), 2)
+        self.assertEqual(len(self.issue_list.filter_by('user', 'Bob')), 0)
 
 
 
