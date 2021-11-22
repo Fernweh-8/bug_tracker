@@ -5,13 +5,14 @@ from itertools import count
 from pprint import pprint
 from datetime import datetime as dt
 from status import Status
+from user import User
 
 ID_GENERATOR = count(start=1)
 
 
 @dataclass()
 class Issue:
-    user: str
+    user: User.name
     title: str
     description: str = field(default='')
     status: Status = field(default=Status.NEW, repr=False)
