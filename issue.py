@@ -12,8 +12,8 @@ ID_GENERATOR = count(start=1)
 
 @dataclass()
 class Issue:
-    user: User.name
     title: str
+    user: str = field(default=User.name)
     description: str = field(default='')
     status: Status = field(default=Status.NEW, repr=False)
     _id: int = field(default_factory=lambda: next(ID_GENERATOR))
