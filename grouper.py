@@ -13,11 +13,10 @@ new_list.add_new(title = "haha", user = "AnnaS", status = 3)
 new_list.add_new(title = "what", user = "AnnaD", status = 3)
 
 
+def group_issues():
+    issues_grouped = defaultdict(list)
+    for issue in new_list.issues:
+        issues_grouped[issue.status].append(issue)
+        pprint.pprint(issues_grouped)
 
-issues_grouped = defaultdict(list)
-
-for issue in new_list.issues:
-    issues_grouped[issue.status].append(issue)
-
-pprint.pprint(issues_grouped)
-
+print(group_issues())
