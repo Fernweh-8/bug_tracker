@@ -15,6 +15,7 @@ class Status(Enum):
                 return status
         raise ValueError('Wrong status')
 
+
     NEW = auto()
     IN_PROGRESS = auto()
     REOPENED = auto()
