@@ -18,11 +18,6 @@ def group_issues(_property):
         issues_grouped[getattr(issue, _property)].append(issue)
     return issues_grouped
 
-# def group_issues(fn):
-#     issues_grouped = defaultdict(list)
-#     for issue in new_list.issues:
-#         issues_grouped[fn(issue)].append(issue)
-#     return issues_grouped
 
 def display_grouped(groups):
     for key in groups:
@@ -32,13 +27,8 @@ def display_grouped(groups):
         print()
 
 # display_grouped(group_issues('status'))
-# fn = lambda issue: issue.user.endswith('S')
-# fn = lambda issue: issue.status
-# fn = lambda issue: issue.status in [1, 2]
 
-# display_grouped(group_issues(fn))
 
-# print(group_issues(fn)[True])
 
 def make_jira_table(groups):
     make_border = lambda rows: '=' * len(max(rows, key = lambda e: len(e)))
