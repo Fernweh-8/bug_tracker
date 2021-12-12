@@ -12,11 +12,11 @@ with sqlite3.connect(db_filename) as conn:
         cur = conn.cursor()
         issues = IssueList().issues
         cur.execute('''CREATE TABLE issue
-                       (id INT PRIMARY KEY NOT NULL, 
+                       (id INTEGER PRIMARY KEY NOT NULL, 
                        title TEXT, 
                        description TEXT, 
                        status TEXT, 
-                       flagged INT, 
+                       flagged INTEGER, 
                        user TEXT, 
                        created TEXT)''')
         cur.executemany("INSERT INTO issue VALUES (?, ?, ?, ?, ?, ?, ? )", issues)
