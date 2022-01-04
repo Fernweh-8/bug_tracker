@@ -3,7 +3,7 @@
 
 def get_attr_choice():
     # pobieramy liste dostepnych pól w klasie Issue
-    attrs = [p for p in vars(Issue) if not p.startswith('_')]
+    attrs = [p for p in vars(Issue) if not p.startswith('_')]s
     print('Filter issues by:')
     # wypisujemy kolejno dostepne pola z Issue, po ktorych mozemy filtrowac (zaczynamy liczyc od 1)
     for no, attr in enumerate(attrs, start = 1):

@@ -1,6 +1,4 @@
-from issue import Issue
 from issue_list import IssueList
-from helpers import write_to_csv
 
 def main():
     my_issues = IssueList()
@@ -11,11 +9,11 @@ def main():
         my_issues.add_new(user = user_name, title = bug_title, description = bug_description, flagged = True)
 
 
-    # print(my_issues.filter_by("user", "Anna"))
+
     print(my_issues.show())
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':s
     main()
 
 
