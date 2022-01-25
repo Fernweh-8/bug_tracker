@@ -87,7 +87,7 @@ class IssueList:
         for issue in self.issues:
             try:
                 if getattr(issue, _property) == _old_value:
-                    setattr(self, _property, _new_value)
+                    setattr(issue, _property, _new_value)
                     print("Done")
             except AttributeError:
                 break

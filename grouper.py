@@ -44,8 +44,8 @@ def display_grouped(groups):
 def grouped_table(_property):
     print(tabulate(group_issues(_property), headers=group_issues(_property).keys()))
 
-# grouped_table("user")
+grouped_table("user")
 
-new_list.change_attr_value("user", "Anna", "Bob")
-print(new_list)
+# new_list.update_property("user", "Anna", "Bob")
+# print(new_list)
 
