@@ -1,5 +1,6 @@
 from collections import defaultdict
 from issue_list import IssueList
+from tabulate import tabulate
 
 new_list = IssueList()
 new_list.add_new(title = "new issue", user = "Anna", status = 0)
@@ -28,15 +29,23 @@ def display_grouped(groups):
 
 
 
-def make_jira_table(groups):
-    make_border = lambda rows: '=' * len(max(rows, key = lambda e: len(e)))
-    rows = []
-    fmt_row = lambda columns: "\n".join(columns)
-    for column in groups:
-        rows.append(fmt_row(map(lambda obj: obj.title, groups[column])))
-    print(make_border(rows))
-    print(rows)
-    print(make_border(rows))
+# def make_jira_table(groups):
+#     make_border = lambda rows: '=' * len(max(rows, key = lambda e: len(e)))
+#     rows = []
+#     fmt_row = lambda columns: "\n".join(columns)
+#     for column in groups:
+#         rows.append(fmt_row(map(lambda obj: obj.title, groups[column])))
+#     print(make_border(rows))
+#     print(rows)
+#     print(make_border(rows))
+#
+# print(make_jira_table(group_issues('status')))
 
-make_jira_table(group_issues('status'))
+def grouped_table(_property):
+    print(tabulate(group_issues(_property), headers=group_issues(_property).keys()))
+
+# grouped_table("user")
+
+new_list.update_property("user", "Anna", "Bob")
+print(new_list)
 
