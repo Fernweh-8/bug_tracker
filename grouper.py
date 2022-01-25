@@ -46,6 +46,6 @@ def grouped_table(_property):
 
 # grouped_table("user")
 
-new_list.update_property("user", "Anna", "Bob")
+new_list.change_attr_value("user", "Anna", "Bob")
 print(new_list)
 

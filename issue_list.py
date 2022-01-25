@@ -77,7 +77,7 @@ class IssueList:
     def change_attr_value(self, _property, _old_value, _new_value):
         for issue in self.issues:
             try:
-                if _property and getattr(issue, _property) == _old_value:
+                if getattr(issue, _property) == _old_value:
                     self._property = _new_value
                     print('Done"')
             except AttributeError:
@@ -86,7 +86,7 @@ class IssueList:
     def update_property(self, _property, _old_value, _new_value):
         for issue in self.issues:
             try:
-                if _property and getattr(issue, _property) == _old_value:
+                if getattr(issue, _property) == _old_value:
                     setattr(self, _property, _new_value)
                     print("Done")
             except AttributeError:
