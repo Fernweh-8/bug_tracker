@@ -17,6 +17,12 @@ class Issue:
     date_created: dt = field(default=dt.now(), repr=True)
     flagged: bool = field(default=False)
 
+    def __repr__(self):
+        return (f"Issue(title='{self.title}', user='{self.user}', "
+                f"description='{self.description}', status={self.status},"
+                f" _id={self._id}, date_created='{self.date_created.strftime('%d/%m/%Y, %H:%M:%S')}',"
+                f" flagged={self.flagged})")
+
 
 
 
