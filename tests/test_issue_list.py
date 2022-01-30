@@ -2,8 +2,6 @@ import unittest
 import sys
 from unittest.mock import patch
 
-# https://stackoverflow.com/questions/30669474/beyond-top-level-package-error-in-relative-import
-# to be able to import our modules from the parent folder
 sys.path.append("..")
 
 from issue_list import IssueList
@@ -49,6 +47,10 @@ class TestIssueList(unittest.TestCase):
         self.assertEqual(len(self.issue_list.filter_by('user', 'Anna')), 3)
         self.assertEqual(len(self.issue_list.filter_by('user', 'John')), 2)
         self.assertEqual(len(self.issue_list.filter_by('user', 'Bob')), 0)
+
+    def test_update_property(self):
+        self.issue_list.update_property("owner", "Anna", "Kate")
+        self.assertRaises(AttributeError)
 
 
 if __name__ == '__main__':
